@@ -3,10 +3,13 @@ on:
     types:
       - opened
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   automation_update:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v4
       - name: Configuration Environment
@@ -24,7 +27,6 @@ jobs:
             gh issue edit $ISSUE_URL --add-label "duplicate"
           else
             echo $ISSUE_BODY >> ./rbl-ip_home.txt
-            git pull
             git add .
             git commit -m "Auto updating rbl list"
             git push
