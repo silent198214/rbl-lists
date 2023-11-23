@@ -14,6 +14,6 @@ jobs:
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           gh issue view $ISSUE_URL --json body
-          echo $ISSUE_BODY >> ./rbl-ip_host.txt
-          tail ./rbl-ip_host.txt
+          echo $ISSUE_BODY >> ./rbl-ip_home.txt
+          tail ./rbl-ip_home.txt
           
