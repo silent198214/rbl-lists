@@ -4,16 +4,30 @@ on:
       - opened
 
 jobs:
-  label_issue:
+  automation_update:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - env:
+      - name: Configuration Environment
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          gh issue view $ISSUE_URL --json body
-          echo $ISSUE_BODY >> ./rbl-ip_home.txt
-          tail ./rbl-ip_home.txt
+          git config --global user.name "Sam Chen"
+          git config --global user.email "silent198214@gmail.com"
+      - name: Update issue label
+        run: |
+          gh issue edit $ISSUE_URL --add-label "processed"
+      - name: Update rbl list
+        run: |
+          grep -qxF $ISSUE_BODY ./rbl-ip_home.txt || echo $ISSUE_BODY >> ./rbl-ip_home.txt
+          git add .
+          git commit -m "Auto updating rbl list"
+          git push
+      - name: Close issue
+        run: |
+          gh issue close $ISSUE_URL
+        
+          
           
