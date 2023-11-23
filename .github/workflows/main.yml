@@ -6,13 +6,13 @@ on:
 jobs:
   automation_update:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ISSUE_URL: ${{ github.event.issue.html_url }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
     steps:
       - uses: actions/checkout@v2
       - name: Configuration Environment
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_URL: ${{ github.event.issue.html_url }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           git config --global user.name "Sam Chen"
           git config --global user.email "silent198214@gmail.com"
