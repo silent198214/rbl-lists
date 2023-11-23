@@ -6,27 +6,29 @@ on:
 jobs:
   automation_update:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      ISSUE_URL: ${{ github.event.issue.html_url }}
-      ISSUE_BODY: ${{ github.event.issue.body }}
+    
     steps:
       - uses: actions/checkout@v2
       - name: Configuration Environment
         run: |
           git config --global user.name "Sam Chen"
           git config --global user.email "silent198214@gmail.com"
-      - name: Update issue label
-        run: |
-          gh issue edit $ISSUE_URL --add-label "processed"
       - name: Update rbl list
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          grep -qxF $ISSUE_BODY ./rbl-ip_home.txt || echo $ISSUE_BODY >> ./rbl-ip_home.txt
-          git add .
-          git commit -m "Auto updating rbl list"
-          git push
-      - name: Close issue
-        run: |
+          if grep -qxF $ISSUE_BODY ./rbl-ip_home.txt
+          then
+            gh issue edit $ISSUE_URL --add-label "duplicate"
+          else
+            gh issue edit $ISSUE_URL --add-label "added"
+            echo $ISSUE_BODY >> ./rbl-ip_home.txt
+            git add .
+            git commit -m "Auto updating rbl list"
+            git push
+          fi
           gh issue close $ISSUE_URL
         
           
