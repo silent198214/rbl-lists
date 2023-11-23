@@ -19,7 +19,6 @@ jobs:
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
-          gh auth refresh -s project
           if grep -qxF $ISSUE_BODY ./rbl-ip_home.txt
           then
             gh issue edit $ISSUE_URL --add-label "duplicate"
