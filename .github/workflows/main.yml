@@ -7,10 +7,13 @@ jobs:
   label_issue:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           gh issue view $ISSUE_URL --json body
-          echo $ISSUE_BODY
+          echo $ISSUE_BODY >> ./rbl-ip_host.txt
+          tail ./rbl-ip_host.txt
+          
