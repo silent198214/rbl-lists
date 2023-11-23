@@ -23,11 +23,11 @@ jobs:
           then
             gh issue edit $ISSUE_URL --add-label "duplicate"
           else
-            gh issue edit $ISSUE_URL --add-label "added"
             echo $ISSUE_BODY >> ./rbl-ip_home.txt
             git add .
             git commit -m "Auto updating rbl list"
             git push
+            gh issue edit $ISSUE_URL --add-label "added"
           fi
           gh issue close $ISSUE_URL
         
