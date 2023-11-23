@@ -22,11 +22,11 @@ jobs:
           ISSUE_URL: ${{ github.event.issue.html_url }}
           ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
+          git pull
           if grep -qxF $ISSUE_BODY ./rbl-ip_home.txt
           then
             gh issue edit $ISSUE_URL --add-label "duplicate"
           else
-            git pull
             echo $ISSUE_BODY >> ./rbl-ip_home.txt
             git add .
             git commit -m "Auto updating rbl list"
