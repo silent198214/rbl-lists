@@ -10,5 +10,7 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ISSUE_URL: ${{ github.event.issue.html_url }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
         run: |
           gh issue view $ISSUE_URL --json body
+          echo $ISSUE_BODY
